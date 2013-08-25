@@ -1,0 +1,10 @@
+2013-08-24 21:10:57+0800 [scrapy] INFO: Scrapy 0.16.5 started (bot: testone)
+2013-08-24 21:10:57+0800 [scrapy] DEBUG: Enabled extensions: TelnetConsole, CloseSpider, WebService, CoreStats, SpiderState, myExt
+2013-08-24 21:10:57+0800 [scrapy] DEBUG: Enabled downloader middlewares: HttpAuthMiddleware, DownloadTimeoutMiddleware, UserAgentMiddleware, RetryMiddleware, DefaultHeadersMiddleware, RedirectMiddleware, CookiesMiddleware, HttpCompressionMiddleware, ChunkedTransferMiddleware, DownloaderStats
+2013-08-24 21:10:57+0800 [scrapy] DEBUG: Enabled spider middlewares: HttpErrorMiddleware, OffsiteMiddleware, RefererMiddleware, UrlLengthMiddleware, DepthMiddleware
+2013-08-24 21:10:57+0800 [scrapy] DEBUG: Enabled item pipelines: TestonePipeline
+2013-08-24 21:10:57+0800 [scrapy] DEBUG: Telnet console listening on 0.0.0.0:6023
+2013-08-24 21:10:57+0800 [scrapy] DEBUG: Web service listening on 0.0.0.0:6080
+2013-08-24 21:10:57+0800 [scrapy] ERROR: More than one spider can handle: <GET http://www.yaolan.com/nutrition/201308211129455.shtml> - zebra, ceshione, testone
+2013-08-24 21:10:57+0800 [default] INFO: Spider opened
+2013-08-24 21:10:57+0800 [default] DEBUG: Crawled (200) <GET http://www.yaolan.com/nutrition/201308211129455.shtml> (referer: None)
