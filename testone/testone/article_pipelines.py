@@ -17,10 +17,16 @@ class TestonePipeline(object):
                 cuTime = time.strftime("%Y-%m-%d %H:%M:%S",time.localtime())
                 title = mdb.escape_string(item['title'][0].encode('utf8'))
                 content = mdb.escape_string(item['content'][0].encode('utf8'))
+                native_sort = mdb.escape_string(item['native_sort'].encode('utf8'))
 
-                sqlOne = "INSERT INTO a_article VALUES(null,'%s','','%s','%s','%s','%s','%s','%s')" %(title,item['source'],cuTime,content,item['section'],item['keyword'],item['link'])
+                sqlOne = "INSERT INTO a_article VALUES(null,'%s','','%s','%s','%s','%s','%s','%s','%s')" %(title,item['source'],cuTime,content,item['section'],item['keyword'],item['link'],native_sort)
                 hde.execute("set names utf8")
                 hde.execute(sqlOne)
+
+                lastId = hde.lastrowid#hde.execute("select LAST_INSERT ID()")
+#for path in item['image_urls']:
+                sqlTwo = "INSERT INTO a_article_image VALUES(null,%d,'%s','%s')" %(lastId,item['image_paths'],item['image_urls'])
+                hde.execute(sqlTwo)
             except mdb.Error,e:
                 print "Error %d: %s" %(e.args[0],e.args[1])
         return item   

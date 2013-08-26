@@ -14,9 +14,12 @@ from scrapy.http import Request
 class ImageDownloaderPipeline(ImagesPipeline):
 
     def get_media_requests(self,item,info):
-        for image_url in item['image_urls']:
-            yield Request(image_url)
+#        for image_url in item['image_urls']:
+#            yield Request(image_url)
+        yield Request(item['image_urls'])
 
     def item_completed(self,results,item,info):
         image_paths = [x['path'] for ok,x in results if ok]
+        item['image_paths'] = image_paths[0]
+#print image_paths
         return item

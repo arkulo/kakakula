@@ -13,5 +13,5 @@ class TestoneItem(Item):
     section = Field()
     keyword = Field()
     image_urls = Field()
-#   images = Field()   
-
+    image_paths = Field()   
+    native_sort = Field()

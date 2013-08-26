@@ -47,6 +47,7 @@ class CeshiSpider(BaseSpider):
         item['source'] = "yaolan.com"
         item['section'] = category
         item['keyword'] = 1
-        item['image_urls'] = hxs.select("//div[@class='cont_font114']//img/@src").extract() 
+        item['image_urls'] = hxs.select("//div[@class='cont_font114']//img/@src").extract()[0] 
+        item['native_sort'] = hxs.select("//div[@class='crumb clear']/a[3]/@title").extract()[0]
         return item
 
