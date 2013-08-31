@@ -7,6 +7,7 @@
 import json
 import MySQLdb as mdb
 import time
+import hashlib
 
 class TestonePipeline(object):
     def process_item(self, item, spider):
@@ -24,9 +25,16 @@ class TestonePipeline(object):
                 hde.execute(sqlOne)
 
                 lastId = hde.lastrowid#hde.execute("select LAST_INSERT ID()")
-#for path in item['image_urls']:
+                #for path in item['image_urls']:
                 sqlTwo = "INSERT INTO a_article_image VALUES(null,%d,'%s','%s')" %(lastId,item['image_paths'],item['image_urls'])
                 hde.execute(sqlTwo)
+                
+                #store crawl url histroy in mysql table
+                tmp = hashlib.md5(item['link'])
+                link = tmp.hexdigest()
+                site = "yaolan"
+                sqlThree = "INSERT INTO crawl_history VALUES(null,'%s','%s','%s')" %(item['link'],link,site)
+                hde.execute(sqlThree)
             except mdb.Error,e:
                 print "Error %d: %s" %(e.args[0],e.args[1])
         return item   
