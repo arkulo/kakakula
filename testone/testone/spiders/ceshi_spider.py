@@ -23,11 +23,12 @@ class CeshiSpider(BaseSpider):
         hxs = HtmlXPathSelector(response)
         res = hxs.select("//div[@class='guidebox clear']/ul/li/a/@href").extract()
         for url in res:
-            if(url.find("preconception/yqys")>0):
+            if(url.find("preconception/fqsh")>0):
                 yield Request(url,callback=lambda response:self.parse_list(response,1))
 
     def parse_list(self,response,category):
         #mysql instance
+        print "["+response.url+"]"
         conn = mdb.connect(host="localhost",user="root",passwd="",db="mydb",port=3307)
         with conn:
             try:
@@ -45,18 +46,33 @@ class CeshiSpider(BaseSpider):
                     if(result[0]<1):
                         yield Request(url,callback=lambda response:self.parse_item(response,category))
 
-#                baseUrl = response.url
-#                pages = hxs.select("//div[@class='cc_page']/a/@href").extract()
-#                for page in pages:
-#                    pageUrl = baseUrl+page
-#                    tmp2 = hashlib.md5(pageUrl)
-#                    md5_url = tmp2.hexdigest()
-#                    sqlTwo = "SELECT COUNT(*) FROM crawl_history WHERE url_md5='%s'" %md5_url
-#                    result1 = hde.execute(sqlTwo)
-#                    if(result1<1):
-#                    {
-#                        yield Request(pageUrl,callback=lambda response:self.parse_list(response,category))
-#                    }
+                subart = hxs.select("//ul[@class='time_list']//a/@href").extract()
+                for suburl in subart:
+                    suburl = "http://www.yaolan.com"+suburl
+                    tmp3 = hashlib.md5(suburl)
+                    submd5url = tmp3.hexdigest()
+                    sqlThree = "SELECT COUNT(*) FROM crawl_history WHERE url_md5='%s'" %submd5url
+                    hd3 = hde.execute(sqlThree)
+                    result3 = hde.fetchone()
+                    #print result
+                    if(result3[0]<1):
+                        yield Request(suburl,callback=lambda response:self.parse_item(response,category))
+                        print suburl                        
+
+
+                baseUrl = "http://www.yaolan.com/preconception/fqsh/"#response.url
+                pages = hxs.select("//div[@class='cc_page']/a/@href").extract()
+                for page in pages:
+                    pageUrl = baseUrl+page
+                    tmp2 = hashlib.md5(pageUrl)
+                    md5_url = tmp2.hexdigest()
+                    sqlTwo = "SELECT COUNT(*) FROM crawl_history WHERE url_md5='%s'" %md5_url
+                    hd1 = hde.execute(sqlTwo)
+                    result1 = hde.fetchone()
+                    if(result1[0]<1):
+                        yield Request(pageUrl,callback=lambda response:self.parse_list(response,category))
+                        sqlFour = "INSERT INTO crawl_history VALUES(null,'%s','%s','%s')" %(pageUrl,md5_url,'yaolan')
+                        hde.execute(sqlFour)
             except mdb.Error,e:
                 print "Error %d: %s" %(e.args[0],e.args[1])
 
@@ -71,7 +87,11 @@ class CeshiSpider(BaseSpider):
         item['source'] = "yaolan.com"
         item['section'] = category
         item['keyword'] = 1
-        item['image_urls'] = hxs.select("//div[@class='cont_font114']//img/@src").extract()[0] 
+        tmp_img = hxs.select("//div[@class='cont_font114']//img/@src").extract()
+        if tmp_img:
+            item['image_urls'] = tmp_img[0]
+        else:
+            item['image_urls'] = ""
         item['native_sort'] = hxs.select("//div[@class='crumb clear']/a[3]/@title").extract()[0]
         return item
 

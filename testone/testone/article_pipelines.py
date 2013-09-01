@@ -26,8 +26,9 @@ class TestonePipeline(object):
 
                 lastId = hde.lastrowid#hde.execute("select LAST_INSERT ID()")
                 #for path in item['image_urls']:
-                sqlTwo = "INSERT INTO a_article_image VALUES(null,%d,'%s','%s')" %(lastId,item['image_paths'],item['image_urls'])
-                hde.execute(sqlTwo)
+                if(""!=item['image_paths']):
+                    sqlTwo = "INSERT INTO a_article_image VALUES(null,%d,'%s','%s')" %(lastId,item['image_paths'],item['image_urls'])
+                    hde.execute(sqlTwo)
                 
                 #store crawl url histroy in mysql table
                 tmp = hashlib.md5(item['link'])
