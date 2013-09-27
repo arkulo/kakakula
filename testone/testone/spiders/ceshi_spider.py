@@ -23,7 +23,7 @@ class CeshiSpider(BaseSpider):
         hxs = HtmlXPathSelector(response)
         res = hxs.select("//div[@class='guidebox clear']/ul/li/a/@href").extract()
         for url in res:
-            if(url.find("preconception/fqsh")>0):
+            if(url.find("preconception/byby")>0):
                 yield Request(url,callback=lambda response:self.parse_list(response,1))
 
     def parse_list(self,response,category):
@@ -60,7 +60,7 @@ class CeshiSpider(BaseSpider):
                         print suburl                        
 
 
-                baseUrl = "http://www.yaolan.com/preconception/fqsh/"#response.url
+                baseUrl = "http://www.yaolan.com/preconception/byby/"#response.url
                 pages = hxs.select("//div[@class='cc_page']/a/@href").extract()
                 for page in pages:
                     pageUrl = baseUrl+page
